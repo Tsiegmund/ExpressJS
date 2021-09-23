@@ -1,10 +1,11 @@
-var ethanpara = "I am a hard working student with a 4.0 GPA." + 
+var ethanpara = "I am a hard working student with a 4.0 GPA." +
 " I play basketball and baseball here at York County School of Technology." +
 " I am able to adapt to many different work environments." +
 " I would prefer to work as a game developer but look to go to college first." +
 " I want to be able to build my own game and create a company from it."
 
-var tylerpara = "My name is Tyler Siegmund. I am interested in the concept of Python." +
+var tylerpara =
+"My name is Tyler Siegmund. I am interested in the concept of Python." +
 " I play too many video games to count and probably know too much about them." +
 " I'm not a very social person, but I do talk if needed." +
 " My dream is to make a game of my own. A little retro RPG game." +
