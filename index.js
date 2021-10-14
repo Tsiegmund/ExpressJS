@@ -1,9 +1,15 @@
-var app = require('express');
+const express = require('express');
 const fs = require('fs');
-var router = app.Router()
-const uspara = require('./parvar.js');
+var app = express()
+var router = require('express').Router();
 
-var names = {ethan: "Ethan Shimmel", tyler: "Tyler Siegmund", justin: "Justin Anderson"}
+router.use(express.urlencoded({ extended: true}));
+
+var rawdata = fs.readFileSync('./static/profiles.json');
+readProfiles = JSON.parse(rawdata);
+readEthan = readProfiles.ethan
+readTyler = readProfiles.tyler
+readJustin = readProfiles.justin
 
 router.get("/", function(req, res) {
   res.render("home");
@@ -15,42 +21,55 @@ router.get('/about', function(req, res) {
 
 router.get('/ethan', function(req, res) {
       res.render("mem", {
-      name: names.ethan,
-      paragraph: uspara.ethan,
+      name: readProfiles.ethan.name,
+      paragraph: readProfiles.ethan.bio,
     });
 });
 
 router.get('/tyler', function(req, res) {
       res.render("mem", {
-      name: names.tyler,
-      paragraph: uspara.tyler,
+      name: readProfiles.tyler.name,
+      paragraph: readProfiles.tyler.bio,
     });
 });
 
 router.get('/justin', function(req, res) {
     res.render("mem", {
-      name: names.justin,
-      paragraph: uspara.justin,
+      name: readJustin = readProfiles.justin.name,
+      paragraph: readJustin = readProfiles.justin.bio,
     });
 });
 
 router.get('/feedback', function(req, res) {
+  res.sendFile(__dirname + '/views/getfeedback.html')
+})
+
+router.post('/feedback', function(req, res) {
+    const user = req.body.user
+    const adjective = req.body.adjective
     var feedBack = {
-      name: req.param("name"),
-      adjective: req.param("adjective")
-  }
+      name: user,
+      adjective: adjective
+    }
     if (feedBack.name && feedBack.adjective) {
       var rawcomments = fs.readFileSync('./static/feedback.json');
-      comments = JSON.parse(rawcomments);
-      comments.push(feedBack);
-      var comments = JSON.stringify(comments);
-      fs.writeFile('./static/feedback.json', comments, 'utf8', function() {
+      feed = JSON.parse(rawcomments);
+      console.log(feed);
+      comments = feed.comments
+      comments.push(feedBack.name + ' ' + feedBack.adjective);
+      var feed = {
+        comments: comments
+      }
+      var feed = JSON.stringify(feed);
+
+      fs.writeFile('./static/feedback.json', feed, 'utf8', function() {
         console.log('Wrote to file');
+        console.log(feed)
       });
       res.render("feedback", {
-        paragraph: feedBack.name + ' ' + feedBack.adjective
+        paragraph: `Thank you ${feedBack.name} for submitting ${feedBack.adjective}`
     })
-  } else if (feedBack.adjective) {
+    } else if (feedBack.adjective) {
       res.render("feedback", {
         paragraph: "Fill out name"
       })
@@ -64,5 +83,7 @@ router.get('/feedback', function(req, res) {
     })
     }
 })
+
+
 
 module.exports = router;
