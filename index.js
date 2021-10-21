@@ -47,7 +47,6 @@ router.get('/justin', function(req, res) {
 router.get('/feedback', function(req, res) {
   var rawcomments = fs.readFileSync('./static/feedback.json');
   feed = JSON.parse(rawcomments);
-  console.log(feed);
   comments = feed.comments
   res.render('getfeedback', {
     comments: comments
@@ -61,7 +60,7 @@ router.post('/feedback', function(req, res) {
       name: user,
       comment: adjective
     }
-    if (feedBack.name && feedBack.comment != " Enter your comment here...") {
+    if (feedBack.name && feedBack.comment) {
       var rawcomments = fs.readFileSync('./static/feedback.json');
       feed = JSON.parse(rawcomments);
       console.log(feed);
@@ -79,7 +78,7 @@ router.post('/feedback', function(req, res) {
       res.render("feedback", {
         paragraph: `Thank you ${feedBack.name} for submitting ${feedBack.comment}`
     })
-  } else if (feedBack.comment != " Enter your comment here...") {
+  } else if (feedBack.comment) {
       res.render("feedback", {
         paragraph: "Fill out name"
       })
